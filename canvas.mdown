@@ -1,0 +1,84 @@
+默认300*150像素，不建议css指定的是画布的显示大小，因为标签里的w，h是画布宽高，style显示设置是渲染宽高。
+
+canvas初始化：
+var canvas=document.getElementById();
+var context=canvas.getContext('2d'); //获取绘图上下文，即绘图接口。
+
+canvas是基于状态进行绘制。
+
+线条绘制：moveTo()
+		lineTo()
+
+多段绘制路径：beginPath(), closePath()
+		   closePath()会将不封闭的路径闭合
+		   beginPath()和lineTo一起使用相当于moveTo
+
+canvas绘制：context.strokeStyle/context.stroke()
+		   context.fillStyle/context.fill()
+		   先fillstyle，再strokestyle，否则填充色会覆盖部分边框线,
+		   后绘制的图形会覆盖原先的图形
+
+填充样式 fillStyle：
+	 线性渐变填充：var grd=canvas.createLinearGradient(xStart,yStart,xEnd,yEnd);
+	 			grd.addColorStop(浮点值,color);（ 可从0.0到1.0添加多个 ）
+	 			fillstyle=grd;
+	 径向渐变填充：var grd=canvas.createRadialGradient(x0,y0,r0,x1,y1,r1);
+	 			grd.addColorStop(浮点值,color);（ 可从0.0到1.0添加多个 ）
+	 			fillstyle=grd;
+	 图片填充：var pattern=canvas.createPattern(img/canvas/video,repeatStyle)
+
+
+Canvas API：
+线条：lineWidth;
+	 lineCap：属性可以控制线条末端的形状是平头、圆头还是方头（"butt（default）"、"round"或"square"）
+	 lineJoin：属性可以控制线条相交的方式是尖交、斜接还是圆交（"miter（default）"、"bevel"或"round"）
+
+矩形：canvas.rect(x,y,width,height)
+	 canvas.fillRect(x,y,width,height,"色值/可选")
+	 canvas.strokeRect(x,y,width,height,"色值/可选")
+	 清除：canvas.clearRect(x,y,width,height)
+
+曲线绘制：
+	 圆形：arc(x, y, radius, startAngle, endAngle, counterclockwise)
+		  以(x,y)为圆心绘制一条弧线，弧线半径为radius，起始和结束角度（用弧度表示）分别为startAngle和endAngle。最后一个参数表示startAngle和endAngle是否按逆时针方向计算，值为false表示按顺时针方向计算。
+	 圆弧：arcTo(x1, y1, x2, y2, radius)
+	 	  从上一点(x0,y0)开始绘制一条与x0x1,x1x2相切的弧线，圆弧半径为radius，(x0,y0)是绘制起始点并不一定是切点，(x2,y2)也不一定是终点。
+	 贝塞尔二次曲线：quadraticCurveTo(x1,y1, x2,y2)	 
+	 			  从上一点(x0,y0)绘制一条终点为(x2,y2)的弧线，(x1,y1)为控制点
+	 贝塞尔三次曲线：bezierCurveTo(x1,y1, x2,y2, x3,y3)
+	 	  		  从上一点(x0,y0)绘制一条终点为(x2,y2)的弧线，(x1,y1)（x2,y2）为控制点
+
+变换：canvas.translate(x,y)
+	 canvas.rotate(deg)
+	 canvas.scale(sx,sy)，图像的其它属性也跟随改变
+	 变换是叠加的，使用canvas.save()和canvas.restore()还原之前的变换操作
+	 先进行变换再进行绘制
+
+文本：canvas.font="20px sans-serif (default)" 最多可设置5个值
+	 canvas.fillStyle="color"
+	 canvas.fillText(string, x, y,[maxlen])
+	 canvas.strokeStyle="color"
+	 canvas.strokeText(string, x, y,[maxlen])
+	 可用填充样式任意填充
+	 canvas.textAlign
+	 canvas.textBaseline
+
+阴影：canvas.shadowColor
+	 canvas.shadowOffsetX
+	 canvas.shadowOffsetY
+	 canvas.shadowBlur
+
+透明度：canvas.globalAlpha=1 (default)
+遮挡：canvas.globalCompositeOperation="sourse-over" (default) 11种值
+剪辑：canvas.clip()
+
+
+
+canvas与js交互：canvas.addEventListener();
+			   canvas.isPointInPath(x,y)
+			   鼠标点击区域：var x=event.clientX-canvas.getBooundingClientRect().left;
+			   			  var y=event.clientY-canvas.getBooundingClientRect().top; （DOM对象getBooundingClientRect()，包围框大小）
+
+
+
+

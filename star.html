@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charse="utf-8"/>
+	<title>canvas_star</title>
+<style>
+	*{
+		margin:0; padding:0;
+	}
+	canvas{
+		display:block;
+	}
+</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+<script>
+	window.onload=function(){
+		var canvas=document.getElementById('canvas');
+		// canva画布大小与视口大小相等
+		var oWidth=canvas.width=document.documentElement.clientWidth;
+		var oHeight=canvas.height=document.documentElement.clientHeight;
+
+		var context=canvas.getContext('2d');
+		// 创建黑色线性渐变天空背景板
+		var skyStyle=context.createLinearGradient(0,0,0,oHeight);
+		skyStyle.addColorStop(0.0,"#000");
+		skyStyle.addColorStop(1.0,"#035");
+		context.fillStyle=skyStyle;
+		context.fillRect(0,0,canvas.width,canvas.height);
+
+		//绘制多个随机星星
+		for (var i = 0; i < 100; i++) {
+			drawStar(context,oWidth*Math.random(),oHeight*Math.random()*0.65,6*Math.random(),360*Math.random());
+		};
+		//
+		drawMoon(context,0.6*oWidth,0.3*oHeight,0.07*oHeight,45);
+		//
+		drawLand(context);
+		//
+		drawText(context,0.1*oWidth,0.9*oHeight)
+	}
+	// 单个星星
+	function drawStar(cxt,x,y,r,a){
+		cxt.beginPath();
+		for (var i = 0; i < 5; i++) {
+			cxt.lineTo(x+2*r*Math.cos((a+i*72)/180*Math.PI), y-2*r*Math.sin((a+i*72)/180*Math.PI));
+			cxt.lineTo(x+r*Math.cos((a+36+i*72)/180*Math.PI), y-r*Math.sin((a+36+i*72)/180*Math.PI));
+		};
+		cxt.closePath();
+		cxt.fillStyle="yellow";
+		cxt.fill();
+	}
+	//月亮
+	function drawMoon(cxt,x,y,r,a){
+		cxt.save();
+		// 先处理变换
+		cxt.translate(x,y);
+		cxt.rotate(a*Math.PI/180);
+		cxt.scale(r,r);
+		
+		cxt.beginPath();
+		// 再在坐标原点画单位圆
+		cxt.arc(0,0,1,0.5*Math.PI,1.5*Math.PI,true);
+		cxt.moveTo(0,-1);
+		cxt.quadraticCurveTo(1,0,0,1);	 
+		cxt.closePath();
+
+		cxt.fillStyle='#fb5';
+		cxt.fill();
+		cxt.restore();
+		
+	}
+	// 草地
+	function drawLand(cxt){
+		var oWidth=document.documentElement.clientWidth;
+		var oHeight=document.documentElement.clientHeight;
+		cxt.beginPath();
+		cxt.moveTo(0, oHeight*0.75);
+		cxt.bezierCurveTo(oWidth*0.4,oHeight*0.65,oWidth*0.7,oHeight*0.9,oWidth,oHeight*0.8);
+		cxt.lineTo(oWidth,oHeight);
+		cxt.lineTo(0,oHeight);
+		cxt.closePath();
+
+		var landStyle=cxt.createLinearGradient(0,oHeight*0.75,oWidth,oHeight);
+		landStyle.addColorStop(0.0,"#030");
+		landStyle.addColorStop(1.0,"#580");
+		cxt.fillStyle=landStyle;
+		cxt.fill();
+	}
+	// 文字
+	function drawText (cxt,x,y) {
+		 cxt.font="20px sans-serif";
+		 cxt.fillStyle="blue";
+		 cxt.fillText("Hellow Dean",x,y); 
+	}
+</script>
+</body>
+</html>
+     
